@@ -1,0 +1,338 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>StreamVHS — Descarga la App</title>
+  <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet" />
+  <style>
+    :root {
+      --red: #e63232;
+      --red-dark: #b01f1f;
+      --cream: #f5f0e8;
+      --dark: #0d0d0d;
+      --mid: #1a1a1a;
+      --gray: #888;
+      --grain-opacity: 0.045;
+    }
+
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    body {
+      background: var(--dark);
+      color: var(--cream);
+      font-family: 'DM Sans', sans-serif;
+      min-height: 100vh;
+      overflow-x: hidden;
+    }
+
+    /* Grain overlay */
+    body::before {
+      content: '';
+      position: fixed;
+      inset: 0;
+      background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)' opacity='1'/%3E%3C/svg%3E");
+      opacity: var(--grain-opacity);
+      pointer-events: none;
+      z-index: 999;
+    }
+
+    /* Scanlines */
+    body::after {
+      content: '';
+      position: fixed;
+      inset: 0;
+      background: repeating-linear-gradient(
+        0deg,
+        transparent,
+        transparent 2px,
+        rgba(0,0,0,0.08) 2px,
+        rgba(0,0,0,0.08) 4px
+      );
+      pointer-events: none;
+      z-index: 998;
+    }
+
+    /* HEADER */
+    header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 1.2rem 2.5rem;
+      border-bottom: 1px solid rgba(255,255,255,0.06);
+      animation: fadeDown 0.6s ease both;
+    }
+
+    .logo {
+      font-family: 'Bebas Neue', sans-serif;
+      font-size: 1.8rem;
+      letter-spacing: 0.12em;
+      color: var(--cream);
+    }
+
+    .logo span {
+      color: var(--red);
+    }
+
+    .badge {
+      background: var(--red);
+      color: #fff;
+      font-size: 0.65rem;
+      font-weight: 500;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      padding: 0.25rem 0.6rem;
+      border-radius: 2px;
+    }
+
+    /* HERO */
+    .hero {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      min-height: calc(100vh - 65px);
+      padding: 3rem 2rem;
+      position: relative;
+      text-align: center;
+    }
+
+    /* Background VHS tape aesthetic */
+    .hero-bg {
+      position: absolute;
+      inset: 0;
+      background:
+        radial-gradient(ellipse 60% 50% at 50% 40%, rgba(230,50,50,0.07) 0%, transparent 70%),
+        radial-gradient(ellipse 80% 60% at 20% 80%, rgba(230,50,50,0.04) 0%, transparent 60%);
+      pointer-events: none;
+    }
+
+    .tape-lines {
+      position: absolute;
+      top: 0; left: 0; right: 0;
+      height: 4px;
+      background: linear-gradient(90deg, transparent 0%, var(--red) 30%, var(--red-dark) 60%, transparent 100%);
+      opacity: 0.6;
+      animation: glitch-line 4s infinite;
+    }
+
+    @keyframes glitch-line {
+      0%, 90%, 100% { transform: scaleX(1); opacity: 0.6; }
+      92% { transform: scaleX(0.3) translateX(-40%); opacity: 0.3; }
+      94% { transform: scaleX(1.1); opacity: 0.8; }
+      96% { transform: scaleX(0.6) translateX(20%); opacity: 0.4; }
+    }
+
+    .eyebrow {
+      font-size: 0.7rem;
+      letter-spacing: 0.25em;
+      text-transform: uppercase;
+      color: var(--red);
+      margin-bottom: 1.2rem;
+      animation: fadeUp 0.6s 0.1s ease both;
+    }
+
+    h1 {
+      font-family: 'Bebas Neue', sans-serif;
+      font-size: clamp(3.5rem, 12vw, 8rem);
+      line-height: 0.9;
+      letter-spacing: 0.04em;
+      color: var(--cream);
+      margin-bottom: 1.5rem;
+      animation: fadeUp 0.6s 0.2s ease both;
+    }
+
+    h1 em {
+      font-style: normal;
+      color: var(--red);
+      display: block;
+    }
+
+    .subtitle {
+      font-size: 1rem;
+      font-weight: 300;
+      color: var(--gray);
+      max-width: 420px;
+      line-height: 1.6;
+      margin-bottom: 2.5rem;
+      animation: fadeUp 0.6s 0.3s ease both;
+    }
+
+    /* DOWNLOAD BUTTON */
+    .dl-wrap {
+      animation: fadeUp 0.6s 0.4s ease both;
+      position: relative;
+    }
+
+    .dl-btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.8rem;
+      background: var(--red);
+      color: #fff;
+      text-decoration: none;
+      font-family: 'Bebas Neue', sans-serif;
+      font-size: 1.4rem;
+      letter-spacing: 0.12em;
+      padding: 1rem 2.5rem;
+      border-radius: 3px;
+      transition: background 0.2s, transform 0.15s, box-shadow 0.2s;
+      box-shadow: 0 0 30px rgba(230,50,50,0.25), 0 4px 20px rgba(0,0,0,0.4);
+      position: relative;
+      overflow: hidden;
+    }
+
+    .dl-btn::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background: linear-gradient(135deg, rgba(255,255,255,0.12) 0%, transparent 60%);
+      pointer-events: none;
+    }
+
+    .dl-btn:hover {
+      background: var(--red-dark);
+      transform: translateY(-2px);
+      box-shadow: 0 0 50px rgba(230,50,50,0.4), 0 8px 30px rgba(0,0,0,0.5);
+    }
+
+    .dl-btn:active {
+      transform: translateY(0);
+    }
+
+    .dl-btn svg {
+      width: 22px;
+      height: 22px;
+      flex-shrink: 0;
+    }
+
+    .dl-meta {
+      margin-top: 0.9rem;
+      font-size: 0.72rem;
+      color: #555;
+      letter-spacing: 0.05em;
+    }
+
+    /* FEATURES */
+    .features {
+      display: flex;
+      gap: 1.5rem;
+      justify-content: center;
+      flex-wrap: wrap;
+      margin-top: 3.5rem;
+      animation: fadeUp 0.6s 0.5s ease both;
+    }
+
+    .feat {
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+      font-size: 0.78rem;
+      color: #666;
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+    }
+
+    .feat-dot {
+      width: 5px;
+      height: 5px;
+      border-radius: 50%;
+      background: var(--red);
+      opacity: 0.7;
+    }
+
+    /* PRICE TAG */
+    .price-badge {
+      position: absolute;
+      top: -0.6rem;
+      right: -1rem;
+      background: var(--cream);
+      color: var(--dark);
+      font-family: 'Bebas Neue', sans-serif;
+      font-size: 1rem;
+      letter-spacing: 0.08em;
+      padding: 0.2rem 0.55rem;
+      border-radius: 2px;
+      transform: rotate(3deg);
+      box-shadow: 0 2px 8px rgba(0,0,0,0.4);
+    }
+
+    /* FOOTER */
+    footer {
+      text-align: center;
+      padding: 2rem;
+      font-size: 0.7rem;
+      color: #333;
+      letter-spacing: 0.06em;
+      border-top: 1px solid rgba(255,255,255,0.04);
+    }
+
+    /* ANIMATIONS */
+    @keyframes fadeUp {
+      from { opacity: 0; transform: translateY(18px); }
+      to   { opacity: 1; transform: translateY(0); }
+    }
+
+    @keyframes fadeDown {
+      from { opacity: 0; transform: translateY(-10px); }
+      to   { opacity: 1; transform: translateY(0); }
+    }
+
+    /* MOBILE */
+    @media (max-width: 480px) {
+      header { padding: 1rem 1.5rem; }
+      .hero { padding: 2rem 1.5rem; }
+      .price-badge { right: -0.5rem; }
+    }
+  </style>
+</head>
+<body>
+
+  <header>
+    <div class="logo">Stream<span>VHS</span></div>
+    <span class="badge">Android</span>
+  </header>
+
+  <section class="hero">
+    <div class="hero-bg"></div>
+    <div class="tape-lines"></div>
+
+    <p class="eyebrow">Aplicación Oficial</p>
+
+    <h1>Tu cine<em>en casa</em></h1>
+
+    <p class="subtitle">
+      Streaming de tu biblioteca personal. Sin anuncios, sin suscripciones externas. Interfaz Stremio-style para Android y Android TV.
+    </p>
+
+    <div class="dl-wrap">
+      <span class="price-badge">2,99 €</span>
+      <a
+        href="https://github.com/nynot1976/streamvhs-download/releases/download/v1.0/app-release.1.apk"
+        class="dl-btn"
+        download="StreamVHS.apk"
+      >
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/>
+          <polyline points="7 10 12 15 17 10"/>
+          <line x1="12" y1="15" x2="12" y2="3"/>
+        </svg>
+        Descargar APK
+      </a>
+      <p class="dl-meta">Android 6.0+ · 3.72 MB · v1.0</p>
+    </div>
+
+    <div class="features">
+      <div class="feat"><div class="feat-dot"></div>Sin anuncios</div>
+      <div class="feat"><div class="feat-dot"></div>Android TV</div>
+      <div class="feat"><div class="feat-dot"></div>Emby / Jellyfin</div>
+      <div class="feat"><div class="feat-dot"></div>Sin rastreo</div>
+    </div>
+  </section>
+
+  <footer>
+    &copy; 2026 StreamVHS · Todos los derechos reservados
+  </footer>
+
+</body>
+</html>
